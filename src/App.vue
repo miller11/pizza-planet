@@ -5,7 +5,7 @@
     </div>
 
     <div class="container">
-      <pp-menu></pp-menu>
+      <router-view></router-view>
     </div>
 
     <div class="container">
@@ -17,15 +17,11 @@
 <script>
 import Header from "./components/Header"
 import Footer from './components/Footer'
-import Home from './components/Home'
-import Menu from './components/Menu'
 
 export default {
   components: {
     ppHeader: Header,
-    ppFooter: Footer,
-    ppHome: Home,
-    ppMenu: Menu
+    ppFooter: Footer
   }
 }
 </script>
