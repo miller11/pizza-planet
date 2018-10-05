@@ -7,12 +7,9 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Menu</a>
-          </li>
+          <router-link :to="{name: 'homeLink'}" tag="li"><a class="nav-link">Home</a></router-link>
+          <router-link :to="{name: 'aboutLink'}" tag="li"><a class="nav-link">About</a></router-link>
+          <router-link :to="{name: 'adminLink'}" tag="li"><a class="nav-link">Admin</a></router-link>
         </ul>
       </div>
     </nav>

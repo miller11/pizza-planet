@@ -8,12 +8,8 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <router-link to="/"><a class="nav-link">Home <span class="sr-only">(current)</span></a></router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/menu"><a class="nav-link" href="#">Menu</a></router-link>
-            </li>
+              <router-link :to="{name: 'homeLink'}" tag="li"><a class="nav-link">Home</a></router-link>
+              <router-link :to="{name: 'menuLink'}" tag="li"><a class="nav-link">Menu</a></router-link>
           </ul>
         </div>
       </nav>
@@ -23,7 +19,7 @@
 
 <script>
     export default {
-        name: "Header"
+
     }
 </script>
 

@@ -1,56 +1,58 @@
 <template>
   <div class="container">
-  <div class="row">
-    <div class="col-sm-12 col-md-6">
-      <pp-new-pizza></pp-new-pizza>
-    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <pp-new-pizza></pp-new-pizza>
+      </div>
 
-    <div class="col-sm-12 col-md-6">
-      <h3>Menu:</h3>
+      <div class="col-sm-12 col-md-6">
+        <h3>Menu:</h3>
 
-      <table class="table table-hover">
-        <thead class="thead-default">
+        <table class="table table-hover">
+          <thead class="thead-default">
           <tr>
             <th>Item</th>
             <th>Remove from Menu</th>
           </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>Margherita</td>
-          <td><button class="btn btn-outline-danger btn-sm">X</button></td>
-        </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Margherita</td>
+            <td>
+              <button class="btn btn-outline-danger btn-sm">X</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <h3>Current orders:</h3>
-      <table class="table table-sm">
-        <thead class="thead-default">
-        <tr>
-          <th>Item</th>
-          <th>Size</th>
-          <th>Quantity</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <div class="order-number"><strong><em>Order Number: 1</em></strong>
-        <button class="btn btn-outline-danger btn-sm">X</button>
-        </div>
-        <tr>
-          <td>Margherita</td>
-          <td>9"</td>
-          <td>1</td>
-          <td>6.95</td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="row">
+      <div class="col-sm-12">
+        <h3>Current orders:</h3>
+        <table class="table table-sm">
+          <thead class="thead-default">
+          <tr>
+            <th>Item</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+          </thead>
+          <tbody>
+          <div class="order-number"><strong><em>Order Number: 1</em></strong>
+            <button class="btn btn-outline-danger btn-sm">X</button>
+          </div>
+          <tr>
+            <td>Margherita</td>
+            <td>9"</td>
+            <td>1</td>
+            <td>6.95</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
     <hr/>
 
@@ -66,12 +68,19 @@
   import NewPizza from './NewPizza'
   import Login from './Login'
 
-    export default {
-      components: {
-        ppNewPizza: NewPizza,
-        ppLogin: Login
+  export default {
+    components: {
+      ppNewPizza: NewPizza,
+      ppLogin: Login
+    },
+    beforeRouteLeave: (to, from, next) => {
+      if(confirm("Have you remembered to log out") === true) {
+        next();
+      } else {
+        next(false);
       }
     }
+  }
 </script>
 
 <style scoped>
