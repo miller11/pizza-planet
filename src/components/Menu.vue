@@ -10,13 +10,13 @@
         </tr>
       </thead>
 
-      <tbody v-for="item in getMenuItems">
+      <tbody v-for="item in getMenuItems" :key="item['.key']">
         <tr>
           <td><strong>{{ item.name }}</strong></td>
         </tr>
       <tr v-for="option in item.options">
         <td>{{ option.size }}</td>
-        <td>{{ option.price }}</td>
+        <td>{{ option.price | currency }}</td>
         <td><button class="btn btn-sm btn-outline-success"
                     type="button"
                     @click="addToBasket(item, option)">+</button></td>
@@ -43,12 +43,12 @@
         <span>{{ item.quantity }}-</span>
         <button class="btn btn-sm" type="button" @click="increaseQuantity(item)">+</button></td>
         <td>{{ item.name }} {{ item.size }}"</td>
-        <td>{{ item.price * item.quantity }}</td>
+        <td>{{ item.price * item.quantity | currency }}</td>
       </tr>
       </tbody>
     </table>
-    <p>Order total: </p>
-    <button class="btn btn-success btn-block">Place Order</button>
+    <p>Order total: {{ total | currency }}</p>
+    <button class="btn btn-success btn-block" @click="addNewOrder">Place Order</button>
     </div>
     <div v-else>
       <p>{{ basketText }}</p>
@@ -61,46 +61,30 @@
 
 
 <script>
+  import { mapGetters } from 'vuex'
+  import { dbOrdersRef} from "../firebaseConfig";
+
+
   export default {
     data() {
       return {
         basket: [],
-        basketText: "Your basket is empty",
-        getMenuItems: {
-          1: {
-            'name': 'Margherita',
-            'description': 'A delicious tomato based pizza topped with mozzarella',
-            'options': [{
-              'size': 9,
-              'price': 6.95
-            }, {
-              'size': 12,
-              'price': 10.95
-            }]
-          },
-          2: {
-            'name': 'Pepperoni',
-            'description': 'A delicious tomato based pizza topped with mozzarella and pepperoni',
-            'options': [{
-              'size': 9,
-              'price': 7.95
-            }, {
-              'size': 12,
-              'price': 12.95
-            }]
-          },
-          3: {
-            'name': 'Ham and Pineapple',
-            'description': 'A delicious tomato based pizza topped with mozzarella, ham and pineapple',
-            'options': [{
-              'size': 9,
-              'price': 7.95
-            }, {
-              'size': 12,
-              'price': 12.95
-            }]
-          }
+        basketText: "Your basket is empty"
+      }
+    },
+    computed: {
+      ...mapGetters ([
+        'getMenuItems'
+      ]),
+      total() {
+        let totalCost = 0;
+
+        for(let items in this.basket) {
+          let individualItem = this.basket[items];
+          totalCost += individualItem.quantity * individualItem.price;
         }
+
+        return totalCost;
       }
     },
     methods: {
@@ -124,6 +108,12 @@
         if(item.quantity === 0) {
           this.removeFromBasket(item);
         }
+      },
+      addNewOrder() {
+        // this.$store.commit('addOrder', this.basket);
+        dbOrdersRef.push(this.basket);
+        this.basket = [];
+        this.basketText = 'Thank you, your order has been placed! :)';
       }
     }
   }

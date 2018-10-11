@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <section v-if="currentUser">
     <div class="row">
       <div class="col-sm-12 col-md-6">
         <pp-new-pizza></pp-new-pizza>
@@ -15,11 +16,11 @@
             <th>Remove from Menu</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody v-for="item in getMenuItems" :key="item['.key']">
           <tr>
-            <td>Margherita</td>
+            <td>{{ item.name }}</td>
             <td>
-              <button class="btn btn-outline-danger btn-sm">X</button>
+              <button class="btn btn-outline-danger btn-sm" @click="removeMenuItem(item['.key'])">X</button>
             </td>
           </tr>
           </tbody>
@@ -29,8 +30,8 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <h3>Current orders:</h3>
-        <table class="table table-sm">
+        <h3>Current orders: {{ numberOfOrders }}</h3>
+        <table class="table table-sm" v-for="(orders, index) in getOrders" :key="orders['.key']">
           <thead class="thead-default">
           <tr>
             <th>Item</th>
@@ -40,19 +41,20 @@
           </tr>
           </thead>
           <tbody>
-          <div class="order-number"><strong><em>Order Number: 1</em></strong>
-            <button class="btn btn-outline-danger btn-sm">X</button>
+          <div class="order-number"><strong><em>Order Number: {{ index + 1 }}</em></strong>
+            <button class="btn btn-outline-danger btn-sm" @click="removeOrderItem(orders['.key'])">X</button>
           </div>
-          <tr>
-            <td>Margherita</td>
-            <td>9"</td>
-            <td>1</td>
-            <td>6.95</td>
+          <tr v-for="orderItems in orders['.value']">
+            <td>{{ orderItems.name }}</td>
+            <td>{{ orderItems.size }}"</td>
+            <td>{{ orderItems.quantity }}</td>
+            <td>{{ orderItems.price | currency }}</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div>
+    </section>
 
     <hr/>
 
@@ -67,22 +69,43 @@
 <script>
   import NewPizza from './NewPizza'
   import Login from './Login'
+  import { mapGetters } from 'vuex'
+  import { dbMenuRef, dbOrdersRef } from "../firebaseConfig";
 
   export default {
     components: {
       ppNewPizza: NewPizza,
       ppLogin: Login
     },
-    beforeRouteLeave: (to, from, next) => {
-      if(confirm("Have you remembered to log out") === true) {
-        next();
-      } else {
-        next(false);
+    computed: {
+      ...mapGetters ( [
+        'numberOfOrders',
+        'getOrders',
+        'getMenuItems',
+        'currentUser'
+      ])
+    },
+    methods: {
+      removeMenuItem(key) {
+        dbMenuRef.child(key).remove();
+      },
+      removeOrderItem(key) {
+        dbOrdersRef.child(key).remove();
       }
     }
+    // ,
+    // beforeRouteLeave: (to, from, next) => {
+    //   if(confirm("Have you remembered to log out") === true) {
+    //     next();
+    //   } else {
+    //     next(false);
+    //   }
+    // }
   }
 </script>
 
 <style scoped>
-
+  .order-number {
+    margin: 10px 0;
+  }
 </style>

@@ -16,7 +16,9 @@ export const routes = [
       "history": History
     }},
   {path: '/menu', name: 'menuLink', component: Menu},
-  {path: '/admin', name: 'adminLink', component: Admin, beforeEnter: (to, from, next) =>{ alert('This area is for authorized users only, please login to continue'); next();} },
+  {path: '/admin', name: 'adminLink', component: Admin
+    //, beforeEnter: (to, from, next) =>{ alert('This area is for authorized users only, please login to continue'); next();}
+    },
   {path: '/about', name: 'aboutLink', component: About, children: [
       {path: '/contact', name: 'contactLink', component: Contact},
       {path: '/history', name: 'historyLink',component: History},
